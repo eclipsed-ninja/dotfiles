@@ -174,8 +174,8 @@ let NERDTreeShowHidden=1
 
 " Command to open nerdtree "
 map <C-o> :NERDTreeToggle<CR>
-" Terminal in V-Split"
-map <C-s> :split term://zsh<CR>
+" Quick View files shortcut"
+map <C-f> :Files<CR>
 
 au BufRead,BufNewFile *.volt setfiletype html
 
