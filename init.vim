@@ -1,60 +1,84 @@
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
+
 call plug#begin('~/.local/share/nvim/plugged')
 
+" Initialize plugin system
+
 " Theme Installation
-Plug 'mhartington/oceanic-next'
 Plug 'arcticicestudio/nord-vim'
+
 " LeftBar Folder Explorer
+" Easily see folder tree
 Plug 'scrooloose/nerdtree'
+
 " Quick Comment Plugin
+" Comment code easily with <leader>cc, <leader>c<space>
 Plug 'scrooloose/nerdcommenter'
+
 " Git Plugin
+" Allows to execute git commands from vim :Git
 Plug 'tpope/vim-fugitive'
+
 " VIM Status, a bit more graphical
 Plug 'vim-airline/vim-airline'
 " Themes for VIM Status
 Plug 'vim-airline/vim-airline-themes'
+
 " Status of git added / modified / removed lines in gutter
-Plug 'airblade/vim-gitgutter'
-" Indent Lines Tracker
-Plug 'Yggdroot/indentLine'
+Plug 'mhinz/vim-signify'
+
 " Multi-Language Support Pack
 Plug 'sheerun/vim-polyglot'
-" Required for fugitive :Gbrowse
-Plug 'tpope/vim-rhubarb'
+
 " Fuzzy File Search
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+
 " Volt Syntax Highlight
 Plug 'Glench/Vim-Jinja2-Syntax'
+
 " Code Completion Engine
+" Is LSP good enough yet ?, If it ain't broke dont fix
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 " Surround Quotes and Brackets
 Plug 'tpope/vim-surround'
+
 " MultiCursor select
-Plug 'terryma/vim-multiple-cursors'
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+
 " Enuch, Quick shell copy move rename
 Plug 'tpope/vim-eunuch'
+
 " Editor Config
+" Helps with indent configuration
 Plug 'editorconfig/editorconfig-vim'
+
 " Lint Engine
 Plug 'dense-analysis/ale'
+
 " Git Blame
 Plug 'tveskag/nvim-blame-line'
-" Prettier
-Plug 'prettier/vim-prettier', { 'do': 'npm install', 'branch': 'release/1.x' }
+
 " Icons NerdTree
 Plug 'ryanoasis/vim-devicons'
+
 " Syntax checking
-Plug 'scrooloose/syntastic'
+"Plug 'scrooloose/syntastic'
+
 " PHP Debug
 Plug 'vim-vdebug/vdebug'
-" Project Root Autodetect
-Plug 'dbakker/vim-projectroot'
-" Initialize plugin system
+
+" GDB
+Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh' }
+
+" Markdown Preview
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+
 call plug#end()
+
 
 " For Neovim 0.1.3 and 0.1.4
 "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
@@ -131,6 +155,8 @@ command! -nargs=0 Prettier :CocCommand prettier.formatFile
 " Map Leader Key
 let mapleader = "`"
 
+" Disable Ale LSP
+let g:ale_disable_lsp = 1
 
 "" NERDTree configuration
 let g:NERDTreeChDirMode=2
@@ -144,6 +170,9 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
+" Reduce Update time for async update for signify
+set updatetime=100
 
 " grep.vim
 nnoremap <silent> <leader>f :Rgrep<CR>
@@ -177,15 +206,19 @@ map <C-o> :NERDTreeToggle<CR>
 " Quick View files shortcut"
 map <C-f> :Files<CR>
 
+" NerdCommenter Config
+let g:NERDCreateDefaultMappings = 0
+map <C-k> :call nerdcommenter#Comment('x', 'toggle')<CR>
+
+" Git Blame quick view
+map <C-b> :ToggleBlameLine<CR>
+
 au BufRead,BufNewFile *.volt setfiletype html
 
+inoremap <silent><expr> <cr> coc#pum#visible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
 
 "function! SetupDebug()
 "  let g:vdebug_options['path_maps'] = {'/home/ashish/PublicHTML': call('projectroot#get', a:000)}
 "  " Hack to override vdebug options
 "endfunction
 "autocmd VimEnter * :call SetupDebug()
-
-
-" Coc Extensions
-let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-json', 'coc-html', 'coc-css', 'coc-python', 'coc-phpls']
